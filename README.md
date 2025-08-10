@@ -10,6 +10,7 @@ A Laravel + ExtJS + MySQL application for viewing and managing currency exchange
 - Dockerized for easy setup
 - Pre-seeded with 50+ currencies and sample rates
 - Comes with unit and feature tests
+- Mobile Responsive UI
 - Function to create new rates is present in the code but commented out — it was not part of the original requirements and is kept only as a potential future enhancement
 
 ## Prerequisites
