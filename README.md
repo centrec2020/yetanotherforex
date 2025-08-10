@@ -2,6 +2,16 @@
 
 A Laravel + ExtJS + MySQL application for viewing and managing currency exchange rates, containerized with Docker.
 
+## Features
+
+- Laravel backend with REST API
+- ExtJS frontend with infinite scrolling (lazy loading)
+- MySQL database
+- Dockerized for easy setup
+- Pre-seeded with 50+ currencies and sample rates
+- Comes with unit and feature tests
+- Function to create new rates is present in the code but commented out — it was not part of the original requirements and is kept only as a potential future enhancement
+
 ## Prerequisites
 
 Before you start, ensure you have the following installed:
@@ -90,6 +100,47 @@ Open your browser and go to:
 http://localhost
 ```
 
+## Seeded Test Data
+
+When running `docker compose exec app php artisan migrate:fresh --seed`, the database is populated with the following:
+
+- **50+ currencies**
+- Exchange rates data for these specific dates:
+  - **Today** (based on your system date)
+  - **2025-08-08**
+  - **2025-07-07**
+  - **2023-07-01**
+
+This ensures that you have a variety of historical and current data available for **testing and development purposes** without needing to manually insert test records.
+
+## Expected Output
+
+To see the anticipated results from installation through system operation, please open the expected_output.mp4 file.
+
+## Running Unit and Feature Tests
+
+This project includes **unit** and **feature** tests to verify functionality.
+
+### Run All Tests
+```bash
+docker compose exec app php artisan test
+```
+
+### Run Only Unit Tests
+```bash
+docker compose exec app php artisan test --testsuite=Unit
+```
+
+### Run Only Feature Tests
+```bash
+docker compose exec app php artisan test --testsuite=Feature
+```
+
+### Run a Specific Test File
+```bash
+docker compose exec app php artisan test tests/Feature/RateApiTest.php
+```
+
 ## Development
 
 ### Rebuilding Containers
@@ -125,44 +176,6 @@ Or use a GUI client with:
 - User: `root`
 - Password: `admin123`
 
-## Features
-
-- Laravel backend with REST API
-- ExtJS frontend with infinite scrolling (lazy loading)
-- MySQL database
-- Dockerized for easy setup
-- Pre-seeded with 50+ currencies and sample rates
-- Comes with unit and feature tests
-- (Commented function) Additional feature to create new rate
-
 ## License
 
 This project is licensed under the MIT License.
-
-## Expected Output
-
-To see the anticipated results from installation through system operation, please open the expected_output.mp4 file.
-
-## Running Unit and Feature Tests
-
-This project includes **unit** and **feature** tests to verify functionality.
-
-### Run All Tests
-```bash
-docker compose exec app php artisan test
-```
-
-### Run Only Unit Tests
-```bash
-docker compose exec app php artisan test --testsuite=Unit
-```
-
-### Run Only Feature Tests
-```bash
-docker compose exec app php artisan test --testsuite=Feature
-```
-
-### Run a Specific Test File
-```bash
-docker compose exec app php artisan test tests/Feature/RateApiTest.php
-```
