@@ -166,8 +166,3 @@ docker compose exec app php artisan test --testsuite=Feature
 ```bash
 docker compose exec app php artisan test tests/Feature/RateApiTest.php
 ```
-
-### Run Tests with Coverage (requires Xdebug enabled)
-```bash
-docker compose exec app php artisan test --coverage
-```
