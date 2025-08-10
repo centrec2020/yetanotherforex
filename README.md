@@ -1,61 +1,173 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Yet Another Forex
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A Laravel + ExtJS + MySQL application for viewing and managing currency exchange rates, containerized with Docker.
 
-## About Laravel
+## Prerequisites
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Before you start, ensure you have the following installed:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- [Docker](https://www.docker.com/get-started)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+- Git
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation
 
-## Learning Laravel
+### 1. Clone the Repository
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+git clone https://github.com/centrec2020/yetanotherforex.git
+cd yetanotherforex
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 2. Configure Environment Variables
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Copy the example `.env` file and adjust settings as needed:
 
-## Laravel Sponsors
+```bash
+cp .env.example .env
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Key variables to check in `.env`:
 
-### Premium Partners
+```env
+APP_NAME=Laravel
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=forex
+DB_USERNAME=forex
+DB_PASSWORD=forex123
+MYSQL_ROOT_PASSWORD=admin123
+```
 
-## Contributing
+> **Note:** `DB_HOST` must match the MySQL service name in `docker-compose.yml` (usually `mysql`).
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 3. Build and Start Containers
 
-## Code of Conduct
+```bash
+docker compose build --no-cache
+docker compose up -d
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+This will start the following containers:
 
-## Security Vulnerabilities
+- `forex_app` (Laravel PHP)
+- `forex_nginx` (Nginx web server)
+- `forex_mysql` (MySQL database)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Install PHP Dependencies
+
+Run Composer inside the `app` container:
+
+```bash
+docker compose exec app composer install
+```
+
+### 5. Generate Application Key
+
+```bash
+docker compose exec app php artisan key:generate
+```
+
+### 6. Run Migrations and Seeders
+
+```bash
+docker compose exec app php artisan migrate:fresh --seed
+```
+
+This will create all necessary tables and seed them with sample currency and rate data.
+
+### 7. Access the Application
+
+Open your browser and go to:
+
+```
+http://localhost
+```
+
+## Development
+
+### Rebuilding Containers
+
+If you make changes to dependencies or Docker-related files, rebuild without cache:
+
+```bash
+docker compose build --no-cache
+docker compose up -d
+```
+
+### Running Artisan Commands
+
+Example:
+
+```bash
+docker compose exec app php artisan migrate
+docker compose exec app php artisan db:seed
+```
+
+### Database Access
+
+You can connect to the MySQL container directly:
+
+```bash
+docker compose exec mysql mysql -u root -padmin123 forex
+```
+
+Or use a GUI client with:
+
+- Host: `127.0.0.1`
+- Port: `3307`
+- User: `root`
+- Password: `admin123`
+
+## Features
+
+- Laravel backend with REST API
+- ExtJS frontend with infinite scrolling (lazy loading)
+- MySQL database
+- Dockerized for easy setup
+- Pre-seeded with 50+ currencies and sample rates
+- Comes with unit and feature tests
+- (Commented function) Additional feature to create new rate
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License.
+
+## Expected Output
+
+To see the anticipated results from installation through system operation, please open the expected_output.mp4 file.
+
+## Running Unit and Feature Tests
+
+This project includes **unit** and **feature** tests to verify functionality.
+
+### Run All Tests
+```bash
+docker compose exec app php artisan test
+```
+
+### Run Only Unit Tests
+```bash
+docker compose exec app php artisan test --testsuite=Unit
+```
+
+### Run Only Feature Tests
+```bash
+docker compose exec app php artisan test --testsuite=Feature
+```
+
+### Run a Specific Test File
+```bash
+docker compose exec app php artisan test tests/Feature/RateApiTest.php
+```
+
+### Run Tests with Coverage (requires Xdebug enabled)
+```bash
+docker compose exec app php artisan test --coverage
+```
